@@ -1,12 +1,14 @@
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
-import { useState } from "react";
-import { useToasts } from "react-toast-notifications";
-import fetcher from "libs/fetcher";
-import { login } from "libs/auth";
+import { useContext, useState } from "react";
 import Router, { useRouter } from "next/router";
 import qs from "qs";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import FirebaseAuthClient from "models/auth/firebase_auth_client";
+import { useToasts } from "react-toast-notifications";
+import {
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+} from "firebase/auth";
+import { AuthContext } from "models/authContext";
+import { auth } from "models/firebase";
 
 const provider = new GoogleAuthProvider();
 
@@ -14,6 +16,8 @@ export default function LoginPage() {
     const { addToast } = useToasts();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const userInfo = useContext(AuthContext);
+    const [isCreate, setIsCreate] = useState(false);
 
     const router = useRouter();
 
@@ -30,27 +34,28 @@ export default function LoginPage() {
 
     const redirectUrl = makeQueryString(router.query.redirect_url);
 
-    const onClick = async () => {
-        signInWithPopup(FirebaseAuthClient.getInstance().Auth, provider)
-            .then((result) => {
-                console.info(result.user);
-                // login({ token: access_token, user });
-                Router.replace(redirectUrl);
-                addToast(`로그인 성공`, { appearance: "success" });
-            })
-            .catch((error) => {
-                console.error(error);
-                // addToast(`로그인 실패 - ${message}`, { appearance: "error" });
-                Router.replace({
-                    pathname: "/login",
-                    query: { redirect_url: redirectUrl },
+    const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setIsCreate((pre) => !pre);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // 회원 가입일때
+        if (isCreate) {
+            createUserWithEmailAndPassword(auth, username, password)
+                .then(() => {
+                    alert("회원가입 성공");
+                })
+                .catch((e) => {
+                    alert(e);
                 });
-            });
+        }
     };
 
     const onKeyPress = (e) => {
         if (e.key === "Enter") {
-            onClick();
+            onClick(e);
         }
     };
 
@@ -89,9 +94,14 @@ export default function LoginPage() {
                 </Form.Group>
             </Row>
             <Row className="mx-0">
-                <Button variant="primary" onClick={onClick}>
-                    로그인
-                </Button>
+                <Form onSubmit={handleSubmit}>
+                    <Button variant="primary">
+                        {isCreate ? "이 아이디로 가입하기" : "로그인 하기"}
+                    </Button>
+                    <Button variant="primary" onClick={onClick}>
+                        {isCreate ? "가입 취소하기" : "회원가입 하러가기"}
+                    </Button>
+                </Form>
             </Row>
         </Container>
     );
