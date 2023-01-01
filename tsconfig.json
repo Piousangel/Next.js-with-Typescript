@@ -1,44 +1,31 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "allowJs": true,
-    "alwaysStrict": true,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "downlevelIteration": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
+    "target": "es5",
     "lib": [
       "dom",
-      "es2017"
+      "dom.iterable",
+      "esnext"
     ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "paths": {
-      "@/*": [
-        "*"
-      ]
-    },
     "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es5",
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
     "incremental": true
   },
-  "exclude": [
-    "node_modules",
-    "next.config.js",
-    "shorturl.js",
-    "sentry.js",
-    "injectEnv.js"
-  ],
   "include": [
+    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
