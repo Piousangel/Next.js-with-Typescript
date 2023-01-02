@@ -1,6 +1,5 @@
 import { Navbar, Container, Row, Col, Nav, Button } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
-
 import styles from "./Layout.module.css";
 import { useContext } from "react";
 import { AuthContext } from "models/authContext";
@@ -8,7 +7,6 @@ import Router from "next/router";
 
 export default function Layout({ children }) {
     const { addToast } = useToasts();
-
     const userInfo = useContext(AuthContext);
     const onLogin = () => {
         const currentPath =
@@ -17,6 +15,7 @@ export default function Layout({ children }) {
             pathname: "/login",
             query: { redirect_url: currentPath },
         });
+        addToast("로그인 페이지로 갑니다!", { appearance: "success" });
     };
 
     return (
@@ -35,15 +34,7 @@ export default function Layout({ children }) {
                     size="sm"
                     onClick={onLogin}
                 >
-                    로그인
-                </Button>
-                <Button
-                    className="m-3"
-                    variant="outline-light"
-                    size="sm"
-                    onClick={onLogin}
-                >
-                    회원가입
+                    로그인 또는 회원가입 하러가기
                 </Button>
             </Navbar>
             <Container fluid>

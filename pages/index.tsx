@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../components/Layout";
 import { Container } from "react-bootstrap";
 import AuthProvider from "models/authProvider";
+import { withAuthSync } from "libs/auth";
 
 const Home = () => {
     return (

@@ -1,8 +1,8 @@
 import "../styles/globals.css";
-import type { AppProps /*, AppContext */ } from "next/app";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastProvider } from "react-toast-notifications";
 
-const MyApp = function ({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }) {
     return (
         <ToastProvider
             autoDismiss
@@ -12,6 +12,6 @@ const MyApp = function ({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
         </ToastProvider>
     );
-};
+}
 
-export default MyApp;
+export default App;
