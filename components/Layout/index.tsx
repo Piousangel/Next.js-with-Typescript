@@ -79,6 +79,11 @@ export default function Layout({ children }) {
                             <Nav.Item>
                                 <Nav.Link href="/Members">Memeber</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href="/NoticeBoard">
+                                    NoticeBoard
+                                </Nav.Link>
+                            </Nav.Item>
                         </Nav>
                     </Col>
                     <Col md={9} lg={10} sm="auto" className="p-4" as="main">
