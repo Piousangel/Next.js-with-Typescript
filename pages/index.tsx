@@ -6,11 +6,11 @@ import { withAuthSync } from "libs/auth";
 
 const Home = () => {
     return (
-        <Layout>
-            <AuthProvider>
+        <AuthProvider>
+            <Layout>
                 <Container fluid className="px-0 d-grid gap-5 mb-5"></Container>
-            </AuthProvider>
-        </Layout>
+            </Layout>
+        </AuthProvider>
     );
 };
 

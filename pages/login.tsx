@@ -4,7 +4,6 @@ import {
     Form,
     Row,
     Col,
-    ButtonGroup,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
 import Router, { useRouter } from "next/router";
@@ -12,7 +11,6 @@ import qs from "qs";
 import { useToasts } from "react-toast-notifications";
 import {
     createUserWithEmailAndPassword,
-    GoogleAuthProvider,
     signInWithEmailAndPassword,
 } from "firebase/auth";
 import { AuthContext } from "models/authContext";

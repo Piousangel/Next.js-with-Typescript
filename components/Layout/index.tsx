@@ -4,11 +4,25 @@ import styles from "./Layout.module.css";
 import { useContext } from "react";
 import { AuthContext } from "models/authContext";
 import Router from "next/router";
+import { signOut } from "firebase/auth";
+import { auth } from "models/firebase";
 
 export default function Layout({ children }) {
     const { addToast } = useToasts();
     const userInfo = useContext(AuthContext);
+    console.log("userInfo", userInfo);
     const onLogin = () => {
+        const currentPath =
+            window.location.pathname + "/" + window.location.search;
+        Router.push({
+            pathname: "/login",
+            query: { redirect_url: currentPath },
+        });
+        addToast("로그인 페이지로 갑니다!", { appearance: "success" });
+    };
+
+    const onLogout = () => {
+        signOut(auth);
         const currentPath =
             window.location.pathname + "/" + window.location.search;
         Router.push({
@@ -28,14 +42,25 @@ export default function Layout({ children }) {
                 <Navbar.Brand href="/" className="px-3">
                     Hyunseok Project
                 </Navbar.Brand>
-                <Button
-                    className="m-3"
-                    variant="outline-light"
-                    size="sm"
-                    onClick={onLogin}
-                >
-                    로그인 또는 회원가입 하러가기
-                </Button>
+                {!userInfo ? (
+                    <Button
+                        className="m-3"
+                        variant="outline-light"
+                        size="sm"
+                        onClick={onLogin}
+                    >
+                        로그인 또는 회원가입 하러가기
+                    </Button>
+                ) : (
+                    <Button
+                        className="m-3"
+                        variant="outline-light"
+                        size="sm"
+                        onClick={onLogout}
+                    >
+                        로그아웃 하러가기
+                    </Button>
+                )}
             </Navbar>
             <Container fluid>
                 <Row>
