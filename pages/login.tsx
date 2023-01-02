@@ -11,14 +11,19 @@ import { AuthContext } from "models/authContext";
 import { auth } from "models/firebase";
 import { login } from "libs/auth";
 import SignupModal from "components/\bSignupModal";
+import { SignupType } from "structures";
 
 export default function LoginPage() {
     const { addToast } = useToasts();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const userInfo = useContext(AuthContext);
-    const [isCreate, setIsCreate] = useState(false);
     const [showSignupMoal, setShowSignupModal] = useState(false);
+    const userInfo = useContext(AuthContext);
+
+    const signUpItem: SignupType = {
+        email: "",
+        password: "",
+    };
 
     const router = useRouter();
 
@@ -37,55 +42,50 @@ export default function LoginPage() {
 
     const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        // setIsCreate(!isCreate);
         setShowSignupModal(!showSignupMoal);
     };
 
-    const onSave = async () => {
-        setIsCreate(!isCreate);
+    const onSave = async (info: SignupType) => {
+        // 회원 가입일때
+        createUserWithEmailAndPassword(auth, info.email, info.password)
+            .then(() => {
+                addToast(`${userInfo}님 회원가입을 환영합니다.`, {
+                    appearance: "success",
+                });
+                setShowSignupModal(!showSignupMoal);
+            })
+            .catch((e) => {
+                Router.replace({
+                    pathname: "/login",
+                    query: { redirect_url: redirectUrl },
+                });
+                addToast(`${e} 회원가입에 실패하였습니다...`, {
+                    appearance: "error",
+                });
+            });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // 회원 가입일때
-        if (isCreate) {
-            createUserWithEmailAndPassword(auth, username, password)
-                .then(() => {
-                    setIsCreate(!isCreate);
-                    addToast(`${userInfo}님 회원가입을 환영합니다.`, {
-                        appearance: "success",
-                    });
-                })
-                .catch((e) => {
-                    Router.replace({
-                        pathname: "/login",
-                        query: { redirect_url: redirectUrl },
-                    });
-                    addToast(`${e} 회원가입에 실패하였습니다...`, {
-                        appearance: "error",
-                    });
+        signInWithEmailAndPassword(auth, username, password)
+            // .then(() => {
+            //     login({ token: userInfo.getIdToken, user: username });
+            // })
+            .then(() => {
+                Router.replace(redirectUrl);
+                addToast(`${userInfo}님 로그인을 환영합니다.`, {
+                    appearance: "success",
                 });
-        } else {
-            signInWithEmailAndPassword(auth, username, password)
-                // .then(() => {
-                //     login({ token: userInfo.getIdToken, user: username });
-                // })
-                .then(() => {
-                    Router.replace(redirectUrl);
-                    addToast(`${userInfo}님 로그인을 환영합니다.`, {
-                        appearance: "success",
-                    });
-                })
-                .catch((e) => {
-                    Router.replace({
-                        pathname: "/login",
-                        query: { redirect_url: redirectUrl },
-                    });
-                    addToast(`${e} 로그인에 실패하였습니다...`, {
-                        appearance: "error",
-                    });
+            })
+            .catch((e) => {
+                Router.replace({
+                    pathname: "/login",
+                    query: { redirect_url: redirectUrl },
                 });
-        }
+                addToast(`${e} 로그인에 실패하였습니다...`, {
+                    appearance: "error",
+                });
+            });
     };
 
     const onKeyPress = (e) => {
@@ -99,7 +99,7 @@ export default function LoginPage() {
             {userInfo ? <div> 로그인 상태입니다 </div> : null}
             <Row className="mb-4">
                 <Col>
-                    <h3> 로그인 또는 회원가입 페이지 </h3>
+                    <h3> 로그인 페이지 </h3>
                 </Col>
             </Row>
             <Row>
@@ -112,9 +112,6 @@ export default function LoginPage() {
                         onChange={(e) => setUsername(e.target.value)}
                         onKeyPress={(e) => onKeyPress(e)}
                     />
-                    <Form.Text className="text-muted">
-                        아이디로 로그인하세요.
-                    </Form.Text>
                 </Form.Group>
             </Row>
             <Row>
@@ -130,7 +127,7 @@ export default function LoginPage() {
                 </Form.Group>
             </Row>
             <Button variant="primary" onClick={handleSubmit}>
-                {isCreate ? "이 아이디로 가입하기" : "로그인 하기"}
+                로그인 하기
             </Button>
             <Button variant="secondary" onClick={onClick}>
                 회원가입 하러가기
@@ -138,7 +135,7 @@ export default function LoginPage() {
             <SignupModal
                 showModal={showSignupMoal}
                 title={"회원가입 폼"}
-                updateDisabled={false}
+                item={signUpItem}
                 onClose={() => setShowSignupModal(false)}
                 onSave={onSave}
             />
