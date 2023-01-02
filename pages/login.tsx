@@ -1,10 +1,4 @@
-import {
-    Button,
-    Container,
-    Form,
-    Row,
-    Col,
-} from "react-bootstrap";
+import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import { useContext, useState } from "react";
 import Router, { useRouter } from "next/router";
 import qs from "qs";
@@ -15,6 +9,8 @@ import {
 } from "firebase/auth";
 import { AuthContext } from "models/authContext";
 import { auth } from "models/firebase";
+import { login } from "libs/auth";
+import SignupModal from "components/\bSignupModal";
 
 export default function LoginPage() {
     const { addToast } = useToasts();
@@ -22,6 +18,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const userInfo = useContext(AuthContext);
     const [isCreate, setIsCreate] = useState(false);
+    const [showSignupMoal, setShowSignupModal] = useState(false);
 
     const router = useRouter();
 
@@ -40,10 +37,12 @@ export default function LoginPage() {
 
     const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        // setIsCreate(!isCreate);
+        setShowSignupModal(!showSignupMoal);
+    };
+
+    const onSave = async () => {
         setIsCreate(!isCreate);
-        console.log("prev", isCreate);
-        console.log("useInfo", userInfo);
-        console.log("auth", auth);
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -68,6 +67,9 @@ export default function LoginPage() {
                 });
         } else {
             signInWithEmailAndPassword(auth, username, password)
+                // .then(() => {
+                //     login({ token: userInfo.getIdToken, user: username });
+                // })
                 .then(() => {
                     Router.replace(redirectUrl);
                     addToast(`${userInfo}님 로그인을 환영합니다.`, {
@@ -127,13 +129,19 @@ export default function LoginPage() {
                     />
                 </Form.Group>
             </Row>
-
             <Button variant="primary" onClick={handleSubmit}>
                 {isCreate ? "이 아이디로 가입하기" : "로그인 하기"}
             </Button>
             <Button variant="secondary" onClick={onClick}>
-                {isCreate ? "가입 취소하기" : "회원가입 하러가기"}
+                회원가입 하러가기
             </Button>
+            <SignupModal
+                showModal={showSignupMoal}
+                title={"회원가입 폼"}
+                updateDisabled={false}
+                onClose={() => setShowSignupModal(false)}
+                onSave={onSave}
+            />
         </Container>
     );
 }
