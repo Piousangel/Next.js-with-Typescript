@@ -1,4 +1,11 @@
-import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import {
+    Button,
+    Container,
+    Form,
+    Row,
+    Col,
+    ButtonGroup,
+} from "react-bootstrap";
 import { useContext, useState } from "react";
 import Router, { useRouter } from "next/router";
 import qs from "qs";
@@ -6,11 +13,10 @@ import { useToasts } from "react-toast-notifications";
 import {
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
+    signInWithEmailAndPassword,
 } from "firebase/auth";
 import { AuthContext } from "models/authContext";
 import { auth } from "models/firebase";
-
-const provider = new GoogleAuthProvider();
 
 export default function LoginPage() {
     const { addToast } = useToasts();
@@ -36,7 +42,10 @@ export default function LoginPage() {
 
     const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setIsCreate((pre) => !pre);
+        setIsCreate(!isCreate);
+        console.log("prev", isCreate);
+        console.log("useInfo", userInfo);
+        console.log("auth", auth);
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -45,10 +54,36 @@ export default function LoginPage() {
         if (isCreate) {
             createUserWithEmailAndPassword(auth, username, password)
                 .then(() => {
-                    alert("회원가입 성공");
+                    setIsCreate(!isCreate);
+                    addToast(`${userInfo}님 회원가입을 환영합니다.`, {
+                        appearance: "success",
+                    });
                 })
                 .catch((e) => {
-                    alert(e);
+                    Router.replace({
+                        pathname: "/login",
+                        query: { redirect_url: redirectUrl },
+                    });
+                    addToast(`${e} 회원가입에 실패하였습니다...`, {
+                        appearance: "error",
+                    });
+                });
+        } else {
+            signInWithEmailAndPassword(auth, username, password)
+                .then(() => {
+                    Router.replace(redirectUrl);
+                    addToast(`${userInfo}님 로그인을 환영합니다.`, {
+                        appearance: "success",
+                    });
+                })
+                .catch((e) => {
+                    Router.replace({
+                        pathname: "/login",
+                        query: { redirect_url: redirectUrl },
+                    });
+                    addToast(`${e} 로그인에 실패하였습니다...`, {
+                        appearance: "error",
+                    });
                 });
         }
     };
@@ -61,9 +96,10 @@ export default function LoginPage() {
 
     return (
         <Container className="my-4 d-grid gap-3">
+            {userInfo ? <div> 로그인 상태입니다 </div> : null}
             <Row className="mb-4">
                 <Col>
-                    <h3> Hyunseok Project</h3>
+                    <h3> 로그인 또는 회원가입 페이지 </h3>
                 </Col>
             </Row>
             <Row>
@@ -93,16 +129,13 @@ export default function LoginPage() {
                     />
                 </Form.Group>
             </Row>
-            <Row className="mx-0">
-                <Form onSubmit={handleSubmit}>
-                    <Button variant="primary">
-                        {isCreate ? "이 아이디로 가입하기" : "로그인 하기"}
-                    </Button>
-                    <Button variant="primary" onClick={onClick}>
-                        {isCreate ? "가입 취소하기" : "회원가입 하러가기"}
-                    </Button>
-                </Form>
-            </Row>
+
+            <Button variant="primary" onClick={handleSubmit}>
+                {isCreate ? "이 아이디로 가입하기" : "로그인 하기"}
+            </Button>
+            <Button variant="secondary" onClick={onClick}>
+                {isCreate ? "가입 취소하기" : "회원가입 하러가기"}
+            </Button>
         </Container>
     );
 }

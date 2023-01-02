@@ -16,7 +16,6 @@ module.exports = {
             sizeLimit: "500kb",
         },
     },
-    reactStrictMode: true,
     publicRuntimeConfig: {
         publicApiKey: process.env.publicApiKey || "",
         authDomain: process.env.FIREBASE_AUTH_HOST || "",
