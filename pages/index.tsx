@@ -1,17 +1,9 @@
 import React from "react";
-import Layout from "../components/Layout";
-import { Container } from "react-bootstrap";
-import AuthProvider from "models/authProvider";
-import { withAuthSync } from "libs/auth";
+import { NextPage } from "next";
+import { ServiceLayout } from "components/service_layout";
 
-const Home = () => {
-    return (
-        <AuthProvider>
-            <Layout>
-                <Container fluid className="px-0 d-grid gap-5 mb-5"></Container>
-            </Layout>
-        </AuthProvider>
-    );
+const IndexPage: NextPage = () => {
+    return <ServiceLayout title="test">test</ServiceLayout>;
 };
 
-export default Home;
+export default IndexPage;
