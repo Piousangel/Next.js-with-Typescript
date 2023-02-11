@@ -77,10 +77,10 @@ export default function Layout({ children }) {
                                 <Nav.Link href="/">Home</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link href="/Members">Memeber</Nav.Link>
+                                <Nav.Link href="/members">Memeber</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link href="/NoticeBoard">
+                                <Nav.Link href="/noticeboard">
                                     NoticeBoard
                                 </Nav.Link>
                             </Nav.Item>

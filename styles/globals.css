@@ -28,6 +28,10 @@ a {
     text-decoration: none;
 }
 
+tr {
+    text-align: center;
+}
+
 * {
     box-sizing: border-box;
 }
