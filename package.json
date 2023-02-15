@@ -15,7 +15,7 @@
         "@types/js-cookie": "^3.0.2",
         "bootstrap": "^5.2.3",
         "cookies": "^0.8.0",
-        "firebase": "^9.15.0",
+        "firebase": "^9.17.1",
         "firebase-admin": "^11.5.0",
         "framer-motion": "^6",
         "js-cookie": "^3.0.1",
