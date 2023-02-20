@@ -1,42 +1,17 @@
 import React from "react";
-import { NextPage } from "next";
-import { ServiceLayout } from "components/service_layout";
-import { Box, Center, Flex, Heading } from "@chakra-ui/react";
-import { GoogleLoginButton } from "components/google_login_button";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import FirebaseClient from "models/firebase_client";
+import Layout from "../components/Layout";
+import { Container } from "react-bootstrap";
+import AuthProvider from "models/authProvider";
+import { withAuthSync } from "libs/auth";
 
-//Box -> div 태그라고 생각합시당
-
-const provider = new GoogleAuthProvider();
-
-const IndexPage: NextPage = () => {
+const Home = () => {
     return (
-        <ServiceLayout title="test">
-            <Box maxW="md" mx="auto">
-                <img src="main_logo.svg" alt="메인 로고" />
-                <Flex justify="center">
-                    <Heading>#Header Header</Heading>
-                </Flex>
-            </Box>
-            <Center mt="20">
-                <GoogleLoginButton
-                    onClick={() => {
-                        signInWithPopup(
-                            FirebaseClient.getInstance().Auth,
-                            provider
-                        )
-                            .then((result) => {
-                                console.info(result.user);
-                            })
-                            .catch((error) => {
-                                console.error(error);
-                            });
-                    }}
-                />
-            </Center>
-        </ServiceLayout>
+        <AuthProvider>
+            <Layout>
+                <Container fluid className="px-0 d-grid gap-5 mb-5"></Container>
+            </Layout>
+        </AuthProvider>
     );
 };
 
-export default IndexPage;
+export default Home;

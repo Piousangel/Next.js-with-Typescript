@@ -1,14 +1,17 @@
 import "../styles/globals.css";
-import { AppProps } from "next/app";
-import { ChakraProvider } from "@chakra-ui/react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastProvider } from "react-toast-notifications";
+import AuthProvider from "models/authProvider";
 
-
-const MyApp = function ({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }) {
     return (
-        <ChakraProvider>
+        <ToastProvider
+            autoDismiss
+            autoDismissTimeout={3000}
+            placement="bottom-left"
+        >
             <Component {...pageProps} />
-        </ChakraProvider>
+        </ToastProvider>
     );
-};
-
-export default MyApp;
+}
+export default App;
