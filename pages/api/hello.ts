@@ -1,5 +1,5 @@
 import FirebaseAdmin from "models/firebase_admin";
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default function handler(_: NextApiRequest, res: NextApiResponse) {
     FirebaseAdmin.getInstance().Firebase.collection("test");

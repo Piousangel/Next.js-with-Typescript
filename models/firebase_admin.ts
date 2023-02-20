@@ -27,7 +27,7 @@ export default class FirebaseAdmin {
     }
 
     /** firestore  필드처럼 실행할 것임*/
-    public get Firestore(): FirebaseFirestore.Firestore {
+    public get Firebase(): FirebaseFirestore.Firestore {
         if (this.init === false) {
             this.bootstrap();
         }
