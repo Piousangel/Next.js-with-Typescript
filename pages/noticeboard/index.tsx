@@ -15,6 +15,8 @@ import Link from "next/link";
 import Layout from "components/Layout";
 import Pagination from "components/Pagination";
 import useDebounce from "hook/useDebounce";
+import NoticeModal from "components/NoticeBoardModal";
+import { ContentType } from "structures";
 
 const NoticeBoard = () => {
     const limit = 20;
@@ -24,6 +26,17 @@ const NoticeBoard = () => {
     const [showModal, setShowModal] = useState(false);
     const [tempComment, setTempComment] = useState("");
     const deboucedComment = useDebounce(tempComment);
+
+    const NoticeBoardItem: ContentType = {
+        title: "",
+        content: "",
+    };
+
+    const onSave = async (info: ContentType) => {
+        // 게시물 등록 후 화면출력하기
+
+        console.log("게시물 등록");
+    };
 
     useEffect(() => {
         setComment(deboucedComment);
@@ -88,7 +101,13 @@ const NoticeBoard = () => {
                     <Form.Label column sm={2}>
                         게시물 작성
                     </Form.Label>
-                    <Button onClick={onClick}>작성하기</Button>
+                    <NoticeModal
+                        showModal={showModal}
+                        id="1"
+                        item={NoticeBoardItem}
+                        onClose={() => setShowModal(false)}
+                        onSave={onSave}
+                    />
                 </Form.Group>
             </Container>
             <Table striped bordered hover responsive>

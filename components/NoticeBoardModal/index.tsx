@@ -3,17 +3,16 @@ import { Button, Form, Modal, Row } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 import { ContentType, SignupType } from "structures";
 
-type SignupModalProps = {
+type NoticeModalProps = {
     showModal: boolean;
     id: string;
-    title?: string;
     item: ContentType;
     onClose: () => void;
     onSave: (item: ContentType) => void;
 };
 
-const SignupModal = (props: SignupModalProps) => {
-    const { showModal, item, titel, onClose, onSave } = props;
+const NoticeModal = (props: NoticeModalProps) => {
+    const { showModal, item, id, onClose, onSave } = props;
 
     const { addToast } = useToasts();
     const [title, setTitle] = useState("");
@@ -40,7 +39,7 @@ const SignupModal = (props: SignupModalProps) => {
     return (
         <Modal show={showModal}>
             <Modal.Header>
-                <Modal.Title>{title}</Modal.Title>
+                <Modal.Title>게시물 작성 폼</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Row className="d-grid gap-4">
@@ -68,7 +67,7 @@ const SignupModal = (props: SignupModalProps) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="primary" onClick={handleSaveInfo}>
-                    회원 가입
+                    게시물 작성
                 </Button>
                 <Button variant="secondary" onClick={onClose}>
                     취소
@@ -78,4 +77,4 @@ const SignupModal = (props: SignupModalProps) => {
     );
 };
 
-export default SignupModal;
+export default NoticeModal;
