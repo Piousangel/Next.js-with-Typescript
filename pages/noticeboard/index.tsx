@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
-// import useSWR from "swr";
 import { useState } from "react";
-import { withAuthSync } from "libs/auth";
 
-import qs from "qs";
 import {
     Table,
     Breadcrumb,
-    Spinner,
     Container,
     Row,
     Form,
@@ -25,8 +21,7 @@ const NoticeBoard = () => {
     const [page, setPage] = useState(1);
     const [comment, setComment] = useState("");
     const [lowScore, setLowScore] = useState(undefined);
-    const [serviceIds, setServiceIds] = useState<number[]>([]);
-
+    const [showModal, setShowModal] = useState(false);
     const [tempComment, setTempComment] = useState("");
     const deboucedComment = useDebounce(tempComment);
 
@@ -39,6 +34,11 @@ const NoticeBoard = () => {
         setTempComment(val);
     };
 
+    const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setShowModal(!showModal);
+    };
+
     const onChangeScore = (checked) => {
         if (checked) {
             setLowScore(3);
@@ -49,36 +49,12 @@ const NoticeBoard = () => {
         }
     };
 
-    const onChangeServiceIds = (newServiceIds: number[]) => {
-        setServiceIds(newServiceIds);
-        setPage(1);
-    };
-
-    // const { data: reviewsData, error: reviewsError } = useSWR<ReviewPagination>(
-    //     `/reviews?${qs.stringify(
-    //         {
-    //             page: Number(page) - 1,
-    //             limit,
-    //             comment,
-    //             low_score: lowScore,
-    //             service_ids: serviceIds,
-    //         },
-    //         { arrayFormat: "repeat" }
-    //     )}`,
-    //     fetcher
-    // );
-
-    // const { data: servicesData = [], error: servicesError } = useSWR(
-    //     `/filters/service`,
-    //     fetcher
-    // );
-
     return (
         <Layout>
             <Breadcrumb>
                 <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
                 <Breadcrumb.Item href="/noticeBoard" active>
-                    Review
+                    게시판
                 </Breadcrumb.Item>
             </Breadcrumb>
             <Container
@@ -112,17 +88,17 @@ const NoticeBoard = () => {
                     <Form.Label column sm={2}>
                         게시물 작성
                     </Form.Label>
-                    <Button>작성하기</Button>
+                    <Button onClick={onClick}>작성하기</Button>
                 </Form.Group>
             </Container>
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>게시물 번호</th>
                         <th>작성자</th>
-                        <th>Rating</th>
-                        <th>Comment</th>
-                        <th>Created At</th>
+                        <th>평점</th>
+                        <th>제목</th>
+                        <th>작성일</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
