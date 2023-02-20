@@ -14,5 +14,4 @@ function App({ Component, pageProps }) {
         </ToastProvider>
     );
 }
-
 export default App;
